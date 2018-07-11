@@ -1,6 +1,6 @@
 {
   "name": "incwrap",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "index.js",
   "module": "dist/incwrap.es.js",
   "jsnext:main": "dist/incwrap.es.js",
