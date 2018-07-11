@@ -24,18 +24,19 @@ const once = (fn) => {
   }
 };
 
-const echelon = function (wrap, unwrap, traverse) {
-  return Object.assign(
+const echelon = (wrap, unwrap, traverse) => {
+  const ctx = Object.assign(
     map(wrap, method => function Wrapper() {
-      return echelon.call(this, wrap, unwrap, once(() =>
-        method.apply(this, [traverse.call(this)].concat(toarr(arguments)))
+      return echelon.call(ctx, wrap, unwrap, once(() =>
+        method.apply(ctx, [traverse.call(ctx)].concat(toarr(arguments)))
       ));
     }),
     map(unwrap, unwrap => function Unwrapper() {
-      return unwrap.apply(this, [traverse.call(this)].concat(toarr(arguments)));
+      return unwrap.apply(ctx, [traverse.call(ctx)].concat(toarr(arguments)));
     })
   );
-}
+  return ctx;
+};
 
 const incwrap = echelon({
   wrap(builder, wrap) {
@@ -46,7 +47,7 @@ const incwrap = echelon({
   }
 }, {
   initialValue(builder, initialValue) {
-    return echelon.call(this,
+    return echelon(
       builder.wrap,
       builder.unwrap,
       () => initialValue
