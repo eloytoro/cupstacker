@@ -1,6 +1,6 @@
 const map = (source, mapper) =>
   Object.keys(source).reduce(
-    (target, key) => ({ ...target, [key]: mapper(source[key], key) }),
+    (target, key) => Object.assign(target, { [key]: mapper(source[key], key) }),
     {}
   );
 
@@ -10,13 +10,29 @@ const update = (source, key, value) => Object.assign(
   { [key]: Object.assign({}, source[key], value) }
 );
 
+const toarr = (val) => [].slice.call(val);
+
+const once = (fn) => {
+  let called = false;
+  let memoized;
+  return function () {
+    if (!called) {
+      called = true;
+      memoized = fn.apply(this, arguments);
+    }
+    return memoized;
+  }
+};
+
 const echelon = function (wrap, unwrap, traverse) {
   return Object.assign(
-    map(wrap, method => function Wrapper(...params) {
-      return echelon.call(this, wrap, unwrap, () => method.call(this, traverse.call(this), ...params));
+    map(wrap, method => function Wrapper() {
+      return echelon.call(this, wrap, unwrap, once(() =>
+        method.apply(this, [traverse.call(this)].concat(toarr(arguments)))
+      ));
     }),
-    map(unwrap, unwrap => function Unwrapper(...params) {
-      return unwrap.call(this, traverse.call(this), ...params);
+    map(unwrap, unwrap => function Unwrapper() {
+      return unwrap.apply(this, [traverse.call(this)].concat(toarr(arguments)));
     })
   );
 }
