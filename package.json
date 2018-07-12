@@ -8,6 +8,9 @@
   "author": "Eloy Toro <eloytoro@gmail.com",
   "scripts": {
     "test": "mocha test/**.test.js",
+    "prepublish": "npm test",
+    "prepare": "npm run build",
+    "prebuild": "rm -rf dist/",
     "build": "rollup -c"
   },
   "engines": {
