@@ -12,10 +12,10 @@ const update = (source, key, value) => Object.assign(
 
 const toarr = (val) => [].slice.call(val);
 
-const echelon = (wrap, unwrap, traverse) => {
+function Echelon(wrap, unwrap, traverse) {
   const ctx = Object.assign(
     map(wrap, method => function Wrapper() {
-      return echelon.call(ctx, wrap, unwrap, () =>
+      return Echelon.call(ctx, wrap, unwrap, () =>
         method.apply(ctx, [traverse.call(ctx)].concat(toarr(arguments)))
       );
     }),
@@ -24,9 +24,9 @@ const echelon = (wrap, unwrap, traverse) => {
     })
   );
   return ctx;
-};
+}
 
-const incwrap = echelon({
+const incwrap = Echelon({
   wrap(builder, wrap) {
     return update(builder, 'wrap', wrap);
   },
@@ -35,7 +35,7 @@ const incwrap = echelon({
   }
 }, {
   initialValue(builder, initialValue) {
-    return echelon(
+    return Echelon(
       builder.wrap,
       builder.unwrap,
       () => initialValue

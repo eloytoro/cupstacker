@@ -5,11 +5,17 @@ describe('middleware', () => {
   it('bubbles operations through middlewares', async () => {
     const app = incwrap
       .wrap({
-        plus: (next, n) => async (m) => await next(n) + m,
-        surr: (next) => async (m) => `(${await next(m)})`
+        plus(next, value) {
+          return async (prevValue) => await next(value) + prevValue;
+        },
+        surr(next) {
+          return async (prevValue) => `(${await next(prevValue)})`;
+        }
       })
       .unwrap({
-        bubble: (fn, n) => fn(n)
+        bubble(fn, n) {
+          return fn(n)
+        }
       })
       .initialValue(n => n)
 
