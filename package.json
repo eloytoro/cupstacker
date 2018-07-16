@@ -23,14 +23,12 @@
     "README"
   ],
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.52",
     "@babel/preset-env": "^7.0.0-beta.52",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
     "rollup": "^0.62.0",
     "rollup-plugin-babel": "^4.0.0-beta.7"
-  },
-  "dependencies": {
-    "@babel/core": "^7.0.0-beta.52"
   },
   "repository": "https://github.com/eloytoro/incwrap"
 }
