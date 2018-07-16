@@ -1,16 +1,34 @@
 {
   "name": "incwrap",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "main": "index.js",
+  "module": "dist/incwrap.es.js",
+  "jsnext:main": "dist/incwrap.es.js",
   "license": "MIT",
+  "author": "Eloy Toro <eloytoro@gmail.com",
   "scripts": {
-    "test": "mocha test/**.test.js"
+    "test": "mocha test/**.test.js",
+    "prepublish": "npm test",
+    "prepare": "npm run build",
+    "prebuild": "rm -rf dist/",
+    "build": "rollup -c"
   },
   "engines": {
     "node": ">=8"
   },
+  "files": [
+    "index.js",
+    "dist/incwrap.cjs.js",
+    "dist/incwrap.es.js",
+    "README"
+  ],
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.52",
+    "@babel/preset-env": "^7.0.0-beta.52",
     "chai": "^4.1.2",
-    "mocha": "^5.2.0"
-  }
+    "mocha": "^5.2.0",
+    "rollup": "^0.62.0",
+    "rollup-plugin-babel": "^4.0.0-beta.7"
+  },
+  "repository": "https://github.com/eloytoro/incwrap"
 }

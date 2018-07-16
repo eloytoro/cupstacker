@@ -10,7 +10,7 @@ describe('ice cream', () => {
       .unwrap({
         topping: (cone, topping) => ({ ...cone, topping })
       })
-      .initialValue({ scoops: [] })
+      .initialValue({ scoops: [], topping: '' })
 
     const basic = cone
       .scoop('chocolate')

@@ -1,6 +1,6 @@
 const map = (source, mapper) =>
   Object.keys(source).reduce(
-    (target, key) => ({ ...target, [key]: mapper(source[key], key) }),
+    (target, key) => Object.assign(target, { [key]: mapper(source[key], key) }),
     {}
   );
 
@@ -10,18 +10,29 @@ const update = (source, key, value) => Object.assign(
   { [key]: Object.assign({}, source[key], value) }
 );
 
-const echelon = function (wrap, unwrap, traverse) {
-  return Object.assign(
-    map(wrap, method => function Wrapper(...params) {
-      return echelon.call(this, wrap, unwrap, () => method.call(this, traverse.call(this), ...params));
+const EchelonFactory = (wrap, unwrap, initialValue) => {
+  class Echelon {
+    constructor(traverse) {
+      this._traverse = traverse;
+    }
+  }
+
+  Object.assign(
+    Echelon.prototype,
+    map(wrap, method => function Wrapper(...args) {
+      return new Echelon(() =>
+        method.call(this, this._traverse(), ...args)
+      );
     }),
-    map(unwrap, unwrap => function Unwrapper(...params) {
-      return unwrap.call(this, traverse.call(this), ...params);
+    map(unwrap, unwrap => function Unwrapper(...args) {
+      return unwrap.call(this, this._traverse(), ...args);
     })
   );
+
+  return new Echelon(() => initialValue);
 }
 
-const incwrap = echelon({
+const incwrap = EchelonFactory({
   wrap(builder, wrap) {
     return update(builder, 'wrap', wrap);
   },
@@ -30,12 +41,8 @@ const incwrap = echelon({
   }
 }, {
   initialValue(builder, initialValue) {
-    return echelon.call(this,
-      builder.wrap,
-      builder.unwrap,
-      () => initialValue
-    );
+    return EchelonFactory(builder.wrap, builder.unwrap, initialValue);
   }
-}, () => ({ wrap: {}, unwrap: {} }));
+}, { wrap: {}, unwrap: {} });
 
 module.exports = incwrap;

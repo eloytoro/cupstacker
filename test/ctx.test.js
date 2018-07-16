@@ -9,12 +9,15 @@ describe('context', () => {
           return n * m;
         },
         sqr(n) {
-          return this.mult(n, n).float();
+          return this.mult(n).float();
         }
       })
       .unwrap({
         float(n) {
           return n;
+        },
+        double() {
+          return this.mult(2).int();
         },
         int(n) {
           return n|0;
@@ -29,9 +32,8 @@ describe('context', () => {
       .sqr()
       .sqr()
 
-    const int = val.int();
-    const str = val.str();
-    expect(int).to.equal(410);
-    expect(str).to.equal('410')
+    expect(val.int()).to.equal(410);
+    expect(val.str()).to.equal('410');
+    expect(val.double()).to.equal(820);
   });
 });
