@@ -1,9 +1,9 @@
-const incwrap = require('../');
+const Incwrap = require('../');
 const { expect } = require('chai');
 
 describe('middleware', () => {
   it('bubbles operations through middlewares', async () => {
-    const app = incwrap
+    const app = Incwrap
       .wrap({
         plus(next, value) {
           return async (prevValue) => await next(value) + prevValue;

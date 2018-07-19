@@ -13,7 +13,7 @@ const update = (source, key, value) => Object.assign(
 const EchelonFactory = (wrap, unwrap, initialValue) => {
   class Echelon {
     constructor(traverse) {
-      this._traverse = traverse;
+      this.$incwrap = { traverse };
     }
   }
 
@@ -21,18 +21,18 @@ const EchelonFactory = (wrap, unwrap, initialValue) => {
     Echelon.prototype,
     map(wrap, method => function Wrapper(...args) {
       return new Echelon(() =>
-        method.call(this, this._traverse(), ...args)
+        method.call(this, this.$incwrap.traverse.call(this), ...args)
       );
     }),
     map(unwrap, unwrap => function Unwrapper(...args) {
-      return unwrap.call(this, this._traverse(), ...args);
+      return unwrap.call(this, this.$incwrap.traverse.call(this), ...args);
     })
   );
 
   return new Echelon(() => initialValue);
 }
 
-const incwrap = EchelonFactory({
+const Incwrap = EchelonFactory({
   wrap(builder, wrap) {
     return update(builder, 'wrap', wrap);
   },
@@ -45,4 +45,4 @@ const incwrap = EchelonFactory({
   }
 }, { wrap: {}, unwrap: {} });
 
-module.exports = incwrap;
+module.exports = Incwrap;

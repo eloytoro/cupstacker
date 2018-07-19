@@ -18,13 +18,13 @@ return an `Echelon` in order to extend the chain.
 * `Unwrapper`: unwrappers are the final step of the chain, when called they execute all of the
 `Wrapper` methods that have been included in the chain so far and compute a final value.
 
-* `incwrap.wrap(wrappers): incwrap`: implements all the methods passed in the `wrappers` object as
+* `Incwrap.wrap(wrappers): Incwrap`: implements all the methods passed in the `wrappers` object as
 wrappers to the chain.
 
-* `incwrap.unwrap(unwrappers): incwrap`: implements all the methods passed in the `unwrappers`
+* `Incwrap.unwrap(unwrappers): Incwrap`: implements all the methods passed in the `unwrappers`
 object as unwrappers to the chain.
 
-* `incwrap.initialValue(value): Echelon`: Creates an Echelon that implements all of the wrappers and
+* `Incwrap.initialValue(value): Echelon`: Creates an Echelon that implements all of the wrappers and
 inwrappers that have been declared in the chain.
 
 ## Example
@@ -34,9 +34,9 @@ which is the final step and the ice cream can no longer be incremented after tha
 the ice cream as a value.
 
 ```javascript
-import incwrap from 'incwrap';
+import Incwrap from 'incwrap';
 
-const cone = incwrap
+const cone = Incwrap
   .wrap({
     scoop(cone, flavor) {
       return { ...cone, scoops: [...cone.scoops, flavor] };

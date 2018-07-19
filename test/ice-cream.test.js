@@ -1,9 +1,9 @@
-const incwrap = require('../');
+const Incwrap = require('../');
 const { expect } = require('chai');
 
 describe('ice cream', () => {
   it('builds an ice cream cone', () => {
-    const cone = incwrap
+    const cone = Incwrap
       .wrap({
         scoop: ({ scoops }, flavor) => ({ scoops: scoops.concat(flavor) }),
       })

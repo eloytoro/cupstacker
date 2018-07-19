@@ -1,9 +1,9 @@
-const incwrap = require('../');
+const Incwrap = require('../');
 const { expect } = require('chai');
 
 describe('context', () => {
   it('can access wrappers', () => {
-    const Arithmetic = incwrap
+    const Arithmetic = Incwrap
       .wrap({
         mult(n, m) {
           return n * m;
